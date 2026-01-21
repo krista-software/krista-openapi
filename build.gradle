@@ -1,0 +1,139 @@
+plugins {
+    id "org.sonarqube" version "4.2.1.3168"
+}
+
+group "app.krista.extensions"
+version(System.getenv('BRANCH') == null ? "local" : System.getenv('BRANCH').replace("/", "_"))
+
+import java.util.regex.Pattern
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
+
+    apply from: file("${rootDir}/dependencies.gradle")
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-Xlint:all,-serial'
+    }
+
+    tasks.register('compile') {
+        dependsOn compileJava
+    }
+
+    repositories {
+        mavenLocal()
+        maven {
+            url System.properties['MAVEN_URL'] ?: "https://packages.cicd.in.antbrains.com/artifactory/libs-release"
+        }
+        mavenCentral()
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                afterEvaluate {
+                    artifactId = jar.archiveBaseName.get()
+                    groupId = project.group
+                }
+            }
+        }
+
+        repositories {
+            mavenLocal()
+            maven {
+                credentials {
+                    username = rootProject.properties['MAVEN_USERNAME']
+                    password = rootProject.properties['MAVEN_PASSWORD']
+                }
+                authentication {
+                    basic(BasicAuthentication)
+                }
+                url rootProject.properties['MAVEN_UPLOAD_URL']
+            }
+        }
+    }
+
+    configurations {
+        implementation {
+            canBeConsumed = false
+            canBeResolved = true
+        }
+    }
+
+    jar {
+        manifest {}
+        from {
+            configurations.implementation.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+        duplicatesStrategy = "exclude"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+// Helper method to extract annotation information - available to all subprojects
+ext.extractAnnotationInfo = { File file, String annotationName, Pattern keyValuePattern, Closure processProperty ->
+    StringBuilder annotationText = new StringBuilder()
+    boolean inAnnotation = false
+
+    file.eachLine { line ->
+        line = line.trim()
+
+        if (line.contains(annotationName)) {
+            inAnnotation = true
+            annotationText.setLength(0)
+            annotationText.append(line)
+        } else if (inAnnotation) {
+            annotationText.append(line)
+        }
+
+        if (inAnnotation && line.contains(")")) {
+            inAnnotation = false
+            def matcher = keyValuePattern.matcher(annotationText.toString())
+            while (matcher.find()) {
+                def key = matcher.group(1)
+                def value = matcher.group(2)
+                processProperty.call(key, value)
+            }
+        }
+    }
+}
+
+tasks.register('candidate', Exec) {
+    commandLine "env",
+            "DOCKER_UPLOAD_REPO=" + rootProject.properties['DOCKER_UPLOAD_REPO'],
+            "MAVEN_URL=" + System.properties['MAVEN_URL'],
+            "MAVEN_UPLOAD_URL=" + rootProject.properties['MAVEN_UPLOAD_URL'],
+            "MAVEN_USERNAME=" + rootProject.properties['MAVEN_USERNAME'],
+            "MAVEN_PASSWORD=" + rootProject.properties['MAVEN_PASSWORD'],
+            "bash", "candidate.sh"
+    standardOutput = new ByteArrayOutputStream()
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
+
+tasks.register('release', Exec) {
+    commandLine "env",
+            "DOCKER_UPLOAD_REPO=" + rootProject.properties['DOCKER_UPLOAD_REPO'],
+            "MAVEN_URL=" + System.properties['MAVEN_URL'],
+            "MAVEN_UPLOAD_URL=" + rootProject.properties['MAVEN_UPLOAD_URL'],
+            "MAVEN_USERNAME=" + rootProject.properties['MAVEN_USERNAME'],
+            "MAVEN_PASSWORD=" + rootProject.properties['MAVEN_PASSWORD'],
+            "bash", "release.sh"
+    standardOutput = new ByteArrayOutputStream()
+    ext.output = {
+        return standardOutput.toString()
+    }
+}

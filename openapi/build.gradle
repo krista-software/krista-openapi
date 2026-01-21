@@ -1,0 +1,21 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+jar.archiveBaseName = "openapi"
+description = 'SDK :: OpenAPI :: API'
+group "app.krista.extensions.sdk.openapi"
+
+dependencies {
+    compileOnly libraries.krista_apis // used to define rest apis
+    compileOnly libraries.hk2_api // used to define scope of objects
+    api libraries.swagger_parser
+
+    // Test dependencies
+    testImplementation testLibraries.junit_jupiter_api
+    testRuntimeOnly testLibraries.junit_jupiter_engine
+    testImplementation testLibraries.mockito_core
+    testImplementation testLibraries.mockito_junit_jupiter
+    testImplementation libraries.krista_apis
+}

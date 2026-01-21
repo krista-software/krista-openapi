@@ -1,0 +1,246 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Churn Prediction API",
+    "version" : "1.0.0"
+  },
+  "paths" : {
+    "/openapi" : {
+      "get" : {
+        "summary" : "Get the OpenAPI Specification (OAS) API specifications",
+        "security" : [
+          {
+            "APIKeyAuth" : []
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OpenAPISpec"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized: Invalid API key"
+          }
+        }
+      }
+    },
+    "/predict" : {
+      "post" : {
+        "summary" : "Predict churn using a sklearn classification model",
+        "security" : [
+          {
+            "APIKeyAuth" : []
+          }
+        ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/InputData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful prediction",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OutputData"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized: Invalid API key"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "OpenAPISpec" : {
+        "type" : "object",
+        "properties" : {
+          "openapi" : {
+            "type" : "string"
+          },
+          "info" : {
+            "type" : "object",
+            "properties" : {
+              "title" : {
+                "type" : "string"
+              },
+              "version" : {
+                "type" : "string"
+              }
+            }
+          },
+          "paths" : {
+            "type" : "object"
+          },
+          "components" : {
+            "type" : "object"
+          }
+        }
+      },
+      "InputData" : {
+        "type" : "object",
+        "properties" : {
+          "gender" : {
+            "type" : "string",
+            "enum" : [
+              "male",
+              "female"
+            ]
+          },
+          "seniorcitizen" : {
+            "type" : "integer",
+            "enum" : [
+              0,
+              1
+            ]
+          },
+          "partner" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "dependents" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "tenure" : {
+            "type" : "integer"
+          },
+          "phoneservice" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "multiplelines" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "internetservice" : {
+            "type" : "string",
+            "enum" : [
+              "dsl",
+              "fiber_optic",
+              "no"
+            ]
+          },
+          "onlinesecurity" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "onlinebackup" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "deviceprotection" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "techsupport" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "streamingtv" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "streamingmovies" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "contract" : {
+            "type" : "string",
+            "enum" : [
+              "month-to-month",
+              "one_year",
+              "two_year"
+            ]
+          },
+          "paperlessbilling" : {
+            "type" : "string",
+            "enum" : [
+              "yes",
+              "no"
+            ]
+          },
+          "paymentmethod" : {
+            "type" : "string",
+            "enum" : [
+              "electronic_check",
+              "mailed_check",
+              "bank_transfer",
+              "credit_card"
+            ]
+          },
+          "monthlycharges" : {
+            "type" : "number"
+          },
+          "totalcharges" : {
+            "type" : "number"
+          }
+        }
+      },
+      "OutputData" : {
+        "type" : "object",
+        "properties" : {
+          "churn" : {
+            "type" : "boolean"
+          },
+          "churn_probability" : {
+            "type" : "number"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "APIKeyAuth" : {
+        "type" : "apiKey",
+        "in" : "header",
+        "name" : "X-API-Key"
+      }
+    }
+  }
+}

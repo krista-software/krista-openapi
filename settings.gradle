@@ -1,0 +1,6 @@
+rootProject.name = 'krista-global-catalog'
+
+include(':access_existing_rest_service')
+include(':openapi')
+include(':openapi:jaxrs')
+include(':openapi:krista')

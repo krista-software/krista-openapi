@@ -1,0 +1,827 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Krista Rest Services API",
+    "description" : "REST API for domain: Insurance",
+    "termsOfService" : "https://krista.ai/terms-of-service/",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
+  "security" : [ {
+    "api-key" : [ ]
+  } ],
+  "paths" : {
+    "/insurance/quoting/get-an-indication" : {
+      "summary" : "Get an Indication",
+      "description" : "Returns an estimated quote",
+      "post" : {
+        "summary" : "Get an Indication",
+        "description" : "Returns an estimated quote",
+        "operationId" : "localDomainRequest_9b0c24f9-b831-4bb0-b7b5-6e3e4043a9c2",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "Aggregate Limit", "Business Income Coverage", "Company Type", "Computer Fraud Endorsement", "Deductible", "NAICS Code", "Number of Employees", "Question Cloud", "Question Encryption", "Question Leadership", "Question Training", "Retroactive Year", "Revenue", "State", "Years in Business", "Waiting Period" ],
+                "type" : "object",
+                "properties" : {
+                  "Aggregate Limit" : {
+                    "type" : "enum",
+                    "enum" : [ "50000", "100000", "250000", "500000", "750000", "1000000", "2000000", "3000000", "4000000", "5000000" ],
+                    "x-krista-field" : {
+                      "options" : [ "50000", "100000", "250000", "500000", "750000", "1000000", "2000000", "3000000", "4000000", "5000000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Business Income Coverage" : {
+                    "type" : "enum",
+                    "enum" : [ "100000", "150000", "200000", "250000", "300000", "350000", "400000", "450000", "500000", "550000", "600000", "650000", "700000", "750000", "800000", "850000", "900000", "1000000" ],
+                    "x-krista-field" : {
+                      "options" : [ "100000", "150000", "200000", "250000", "300000", "350000", "400000", "450000", "500000", "550000", "600000", "650000", "700000", "750000", "800000", "850000", "900000", "1000000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Company Type" : {
+                    "type" : "enum",
+                    "enum" : [ "Public", "Private", "Non-Profit", "Private Sector", "Partnership", "Non-Corporation" ],
+                    "x-krista-field" : {
+                      "options" : [ "Public", "Private", "Non-Profit", "Private Sector", "Partnership", "Non-Corporation" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Computer Fraud Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Deductible" : {
+                    "type" : "enum",
+                    "enum" : [ "1000", "1500", "2500", "5000", "10000", "25000", "50000" ],
+                    "x-krista-field" : {
+                      "options" : [ "1000", "1500", "2500", "5000", "10000", "25000", "50000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "NAICS Code" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 6,
+                      "type" : "Identifier",
+                      "maxLength" : 6
+                    }
+                  },
+                  "Number of Employees" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "minValue" : 1.0,
+                      "maxValue" : 1.0E9,
+                      "type" : "Number"
+                    }
+                  },
+                  "Question Cloud" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Question Encryption" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Question Leadership" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Question Training" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Retroactive Year" : {
+                    "type" : "enum",
+                    "enum" : [ "1", "2", "3" ],
+                    "x-krista-field" : {
+                      "options" : [ "1", "2", "3" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Revenue" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "minValue" : 100000.0,
+                      "maxValue" : 9.99999999999E11,
+                      "type" : "Currency"
+                    }
+                  },
+                  "State" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 2,
+                      "type" : "State",
+                      "maxLength" : 2
+                    }
+                  },
+                  "Years in Business" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "minValue" : 1.0,
+                      "maxValue" : 1000.0,
+                      "type" : "Number"
+                    }
+                  },
+                  "Hardware Replacement Cost Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Hardware Replacement Cost Sub Limit" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "maxValue" : 1000000.0,
+                      "type" : "Number"
+                    }
+                  },
+                  "Post Breach Remediation Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Post Breach Remediation Sub Limit" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "minValue" : 1000.0,
+                      "maxValue" : 1000000.0,
+                      "type" : "Number"
+                    }
+                  },
+                  "Ransom Payment Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Ransom Payment Limit" : {
+                    "type" : "enum",
+                    "enum" : [ "250000", "500000", "1000000" ],
+                    "x-krista-field" : {
+                      "options" : [ "250000", "500000", "1000000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Social Eng Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Social Eng Limit" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Social Eng Deductible" : {
+                    "type" : "enum",
+                    "enum" : [ "10000", "25000", "50000" ],
+                    "x-krista-field" : {
+                      "options" : [ "10000", "25000", "50000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Telecoms Fraud Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Telecoms Fraud Sub Limit" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "minValue" : 10000.0,
+                      "maxValue" : 500000.0,
+                      "type" : "Number"
+                    }
+                  },
+                  "Waiting Period" : {
+                    "type" : "enum",
+                    "enum" : [ "6", "8", "12", "24" ],
+                    "x-krista-field" : {
+                      "options" : [ "6", "8", "12", "24" ],
+                      "type" : "PickOne"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ ],
+                  "type" : "object",
+                  "properties" : {
+                    "Broker Fee" : {
+                      "type" : "number",
+                      "format" : "double",
+                      "x-krista-field" : {
+                        "minValue" : 0.0,
+                        "type" : "Currency"
+                      }
+                    },
+                    "Cum Coverage Premium" : {
+                      "type" : "number",
+                      "format" : "double",
+                      "x-krista-field" : {
+                        "minValue" : 10.0,
+                        "maxValue" : 1000000.0,
+                        "type" : "Currency"
+                      }
+                    },
+                    "Endorsement Premium" : {
+                      "type" : "number",
+                      "format" : "double",
+                      "x-krista-field" : {
+                        "minValue" : 10.0,
+                        "maxValue" : 1000000.0,
+                        "type" : "Currency"
+                      }
+                    },
+                    "Final Premium" : {
+                      "type" : "number",
+                      "format" : "double",
+                      "x-krista-field" : {
+                        "minValue" : 100.0,
+                        "maxValue" : 1000000.0,
+                        "type" : "Currency"
+                      }
+                    },
+                    "State Fee Amount" : {
+                      "type" : "number",
+                      "format" : "double",
+                      "x-krista-field" : {
+                        "minValue" : 0.0,
+                        "maxValue" : 100000.0,
+                        "type" : "Currency"
+                      }
+                    },
+                    "Total Adjustment Premium" : {
+                      "type" : "number",
+                      "format" : "double",
+                      "x-krista-field" : {
+                        "minValue" : 0.0,
+                        "maxValue" : 1000000.0,
+                        "type" : "Currency"
+                      }
+                    },
+                    "Total Premium" : {
+                      "type" : "number",
+                      "format" : "double",
+                      "x-krista-field" : {
+                        "minValue" : 100.0,
+                        "maxValue" : 1000000.0,
+                        "type" : "Currency"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api-key" : [ ]
+        } ],
+        "x-krista-request-id" : "localDomainRequest_9b0c24f9-b831-4bb0-b7b5-6e3e4043a9c2",
+        "x-krista-request-type" : "CHANGE_SYSTEM"
+      },
+      "x-krista-area-name" : "Quoting"
+    },
+    "/insurance/quoting/generate-a-quote" : {
+      "summary" : "Generate a quote",
+      "description" : "To create a new quote",
+      "post" : {
+        "summary" : "Generate a quote",
+        "description" : "To create a new quote",
+        "operationId" : "localDomainRequest_50a7268c-f74f-4e53-a384-3671dfe97713",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "Business Income Coverage", "Computer Fraud Endorsement", "Deductible", "Effective Date", "Limit", "Retroactive Period", "State", "Waiting Period", "ZIP" ],
+                "type" : "object",
+                "properties" : {
+                  "Business Income Coverage" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "minValue" : 100000.0,
+                      "maxValue" : 1.0E11,
+                      "type" : "Currency"
+                    }
+                  },
+                  "Computer Fraud Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Deductible" : {
+                    "type" : "enum",
+                    "enum" : [ "1000", "1500", "2500", "5000", "10000", "25000", "50000" ],
+                    "x-krista-field" : {
+                      "options" : [ "1000", "1500", "2500", "5000", "10000", "25000", "50000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Effective Date" : {
+                    "type" : "number",
+                    "format" : "int64",
+                    "x-krista-field" : {
+                      "type" : "Date"
+                    }
+                  },
+                  "Limit" : {
+                    "type" : "enum",
+                    "enum" : [ "50000", "100000", "250000", "500000", "750000", "1000000", "2000000", "3000000", "4000000", "5000000" ],
+                    "x-krista-field" : {
+                      "options" : [ "50000", "100000", "250000", "500000", "750000", "1000000", "2000000", "3000000", "4000000", "5000000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Retroactive Period" : {
+                    "type" : "enum",
+                    "enum" : [ "1", "2", "3" ],
+                    "x-krista-field" : {
+                      "options" : [ "1", "2", "3" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "State" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 2,
+                      "type" : "State",
+                      "maxLength" : 2
+                    }
+                  },
+                  "Waiting Period" : {
+                    "type" : "enum",
+                    "enum" : [ "6", "8", "12", "24" ],
+                    "x-krista-field" : {
+                      "options" : [ "6", "8", "12", "24" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "ZIP" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 5,
+                      "type" : "PostalCode",
+                      "maxLength" : 10
+                    }
+                  },
+                  "Account Description" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 0,
+                      "type" : "Text",
+                      "maxLength" : 1024
+                    }
+                  },
+                  "Account Id" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Identifier"
+                    }
+                  },
+                  "Account Name" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 0,
+                      "type" : "Text",
+                      "maxLength" : 256
+                    }
+                  },
+                  "Address 1" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 0,
+                      "type" : "Street",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Address 2" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 0,
+                      "type" : "Street2",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Agency Id" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Identifier"
+                    }
+                  },
+                  "Agent Email" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Email"
+                    }
+                  },
+                  "Agent First Name" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Person",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Agent Last Name" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Person",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Agent Phone" : {
+                    "type" : "object",
+                    "properties" : {
+                      "countryCode" : {
+                        "type" : "integer",
+                        "format" : "int64"
+                      },
+                      "nationalNumber" : {
+                        "type" : "integer",
+                        "format" : "int64"
+                      }
+                    },
+                    "x-krista-field" : {
+                      "type" : "Phone"
+                    }
+                  },
+                  "City" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "City",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Claim History" : {
+                    "type" : "enum",
+                    "enum" : [ "Never", "Within the ast 12 months", "Within the last 2 years", "Within the last 3 years", "Within the last 4 years", "Within the last 5 years or more" ],
+                    "x-krista-field" : {
+                      "options" : [ "Never", "Within the ast 12 months", "Within the last 2 years", "Within the last 3 years", "Within the last 4 years", "Within the last 5 years or more" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "DA Agency Id" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Identifier"
+                    }
+                  },
+                  "DBA or Trade Style" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 1,
+                      "type" : "Text",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Domain Name" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 6,
+                      "type" : "Text",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Domains" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 6,
+                      "type" : "Text",
+                      "maxLength" : 1024
+                    }
+                  },
+                  "DUNS Number" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 9,
+                      "type" : "Identifier",
+                      "maxLength" : 13
+                    }
+                  },
+                  "Entity Type" : {
+                    "type" : "enum",
+                    "enum" : [ "Independent", "Parent", "Subsidiary" ],
+                    "x-krista-field" : {
+                      "options" : [ "Independent", "Parent", "Subsidiary" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Is Authenticating Fund Transfer Requests" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Is Franchise" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "isPreventingUnauthorizedWireTransfers" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Is Security Officer" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Is Security Training" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "Is Verifying Bank Accounts" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "NAICS Code" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "minLength" : 6,
+                      "type" : "Identifier",
+                      "maxLength" : 6
+                    }
+                  },
+                  "Nature Of Business" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Text",
+                      "maxLength" : 256
+                    }
+                  },
+                  "Number of Employees" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "minValue" : 1.0,
+                      "maxValue" : 1.0E9,
+                      "type" : "Number"
+                    }
+                  },
+                  "Ownership Type" : {
+                    "type" : "enum",
+                    "enum" : [ "Public", "Private", "Non-Profit", "Private Sector", "Partnership", "Non-Corporates" ],
+                    "x-krista-field" : {
+                      "options" : [ "Public", "Private", "Non-Profit", "Private Sector", "Partnership", "Non-Corporates" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Phone Number" : {
+                    "type" : "object",
+                    "properties" : {
+                      "countryCode" : {
+                        "type" : "integer",
+                        "format" : "int64"
+                      },
+                      "nationalNumber" : {
+                        "type" : "integer",
+                        "format" : "int64"
+                      }
+                    },
+                    "x-krista-field" : {
+                      "type" : "Phone"
+                    }
+                  },
+                  "Policy Contact Email" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Email"
+                    }
+                  },
+                  "Policy Contact First Name" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Person",
+                      "maxLength" : 128
+                    }
+                  },
+                  "Policy Contact Last Name" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Person",
+                      "maxLength" : 256
+                    }
+                  },
+                  "Policy Contact Phone" : {
+                    "type" : "object",
+                    "properties" : {
+                      "countryCode" : {
+                        "type" : "integer",
+                        "format" : "int64"
+                      },
+                      "nationalNumber" : {
+                        "type" : "integer",
+                        "format" : "int64"
+                      }
+                    },
+                    "x-krista-field" : {
+                      "type" : "Phone"
+                    }
+                  },
+                  "Revenue" : {
+                    "type" : "number",
+                    "format" : "double",
+                    "x-krista-field" : {
+                      "type" : "Currency"
+                    }
+                  },
+                  "Social Eng Deductible" : {
+                    "type" : "enum",
+                    "enum" : [ "50000", "100000", "250000" ],
+                    "x-krista-field" : {
+                      "options" : [ "50000", "100000", "250000" ],
+                      "type" : "PickOne"
+                    }
+                  },
+                  "Social Eng Endorsement" : {
+                    "type" : "boolean",
+                    "x-krista-field" : {
+                      "type" : "Switch"
+                    }
+                  },
+                  "URL" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Text",
+                      "maxLength" : 256
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "required" : [ ],
+                  "type" : "object",
+                  "properties" : {
+                    "Quote Id" : {
+                      "type" : "string",
+                      "x-krista-field" : {
+                        "type" : "Identifier"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api-key" : [ ]
+        } ],
+        "x-krista-request-id" : "localDomainRequest_50a7268c-f74f-4e53-a384-3671dfe97713",
+        "x-krista-request-type" : "CHANGE_SYSTEM"
+      },
+      "x-krista-area-name" : "Quoting"
+    },
+    "/insurance/quoting/get-pdf-of-quote" : {
+      "summary" : "Get PDF of quote",
+      "description" : "To retrieve the generated PDF of the quote",
+      "post" : {
+        "summary" : "Get PDF of quote",
+        "description" : "To retrieve the generated PDF of the quote",
+        "operationId" : "localDomainRequest_d07431ae-8fcc-4fe2-a217-2c4f24257d7a",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "Quote ID" ],
+                "type" : "object",
+                "properties" : {
+                  "Quote ID" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : { }
+          }
+        },
+        "security" : [ {
+          "api-key" : [ ]
+        } ],
+        "x-krista-request-id" : "localDomainRequest_d07431ae-8fcc-4fe2-a217-2c4f24257d7a",
+        "x-krista-request-type" : "CHANGE_SYSTEM"
+      },
+      "x-krista-area-name" : "Quoting"
+    },
+    "/insurance/quoting/get-quote-details" : {
+      "summary" : "Get quote details",
+      "description" : "To retrieve the details of a quote",
+      "post" : {
+        "summary" : "Get quote details",
+        "description" : "To retrieve the details of a quote",
+        "operationId" : "localDomainRequest_ba3dbbfd-c8f0-4da9-9aca-01fa9059f6dc",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "required" : [ "Quote ID" ],
+                "type" : "object",
+                "properties" : {
+                  "Quote ID" : {
+                    "type" : "string",
+                    "x-krista-field" : {
+                      "type" : "Text"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful response",
+            "content" : { }
+          }
+        },
+        "security" : [ {
+          "api-key" : [ ]
+        } ],
+        "x-krista-request-id" : "localDomainRequest_ba3dbbfd-c8f0-4da9-9aca-01fa9059f6dc",
+        "x-krista-request-type" : "CHANGE_SYSTEM"
+      },
+      "x-krista-area-name" : "Quoting"
+    }
+  },
+  "components" : {
+    "securitySchemes" : {
+      "api-key" : {
+        "type" : "apiKey",
+        "name" : "api-key",
+        "in" : "header"
+      }
+    }
+  },
+  "x-krista-version" : "1.0.2",
+  "x-krista-domain" : {
+    "ecosystemId" : "catEntryEcosystem_5516afe8-3809-4918-b911-d89597fc96e0",
+    "ecosystemName" : "Cyber Security",
+    "version" : "18e488de-e8c5-423f-97ea-44036a91c1c8",
+    "domainId" : "catEntryDomain_7e9291cb-a9e2-420f-b58f-c99961b93512",
+    "domainName" : "Insurance"
+  }
+}

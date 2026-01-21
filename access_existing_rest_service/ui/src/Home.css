@@ -1,0 +1,5 @@
+.inner-html a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #1a0dab;
+}

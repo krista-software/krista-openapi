@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+jar.archiveBaseName = "openapi-krista"
+description = 'SDK :: OpenAPI :: Krista Binding'
+group "app.krista.extensions.sdk.openapi.krista"
+
+dependencies {
+    compileOnly libraries.krista_apis // used to define rest apis
+    compileOnly libraries.hk2_api // used to define scope of objects
+    compileOnly project(':openapi')
+
+    // Test dependencies
+    testImplementation testLibraries.junit_jupiter_api
+    testRuntimeOnly testLibraries.junit_jupiter_engine
+    testImplementation testLibraries.mockito_core
+    testImplementation testLibraries.mockito_junit_jupiter
+    testImplementation libraries.krista_apis
+    testImplementation project(':openapi')
+}

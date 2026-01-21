@@ -1,0 +1,181 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'application'
+    id("com.github.node-gradle.node") version "3.6.0"
+}
+
+group 'app.krista.extensions.krista.access_existing_rest_service'
+
+def computedBaseName = "openapi-extension"
+def computedVersion = "local"
+
+import java.util.regex.Pattern
+
+tasks.register("generateReleaseProperties") {
+    group = 'build'
+    description = 'Generates release.properties file with extension version and domain information'
+
+    doLast {
+        def extensionFilePath = 'src/main/java/app/krista/extensions/krista/access_existing_rest_service/OpenApiExtension.java'
+        def areaFilePath = 'src/main/java/app/krista/extensions/krista/access_existing_rest_service/RestArea.java'
+
+        def extensionFile = project.file(extensionFilePath)
+        def areaFile = project.file(areaFilePath)
+
+        if (!extensionFile.exists()) {
+            throw new GradleException("Extension file not found: ${extensionFilePath}")
+        }
+        if (!areaFile.exists()) {
+            throw new GradleException("Area file not found: ${areaFilePath}")
+        }
+
+        def properties = new Properties()
+        def keyValuePattern = Pattern.compile(/(\w+)\s*=\s*"([^"]+)"/)
+
+        // Extract Extension annotation information
+        rootProject.ext.extractAnnotationInfo(extensionFile, "@Extension", keyValuePattern) { key, value ->
+            if (key == "version") {
+                properties.setProperty("extension.version", value)
+                logger.lifecycle("Found extension version: ${value}")
+            } else if (key == "name") {
+                properties.setProperty("extension.name", value)
+                logger.lifecycle("Found extension name: ${value}")
+            }
+        }
+
+        // Extract Domain annotation information from the area file
+        rootProject.ext.extractAnnotationInfo(areaFile, "@Domain", keyValuePattern) { key, value ->
+            if (key == "name") {
+                properties.setProperty("domain.name", value)
+                logger.lifecycle("Found domain name: ${value}")
+            } else if (key == "ecosystemName") {
+                properties.setProperty("ecosystem.name", value)
+                logger.lifecycle("Found ecosystem name: ${value}")
+            }
+        }
+
+        // Set default values if not found in annotations
+        if (!properties.getProperty('extension.name')) {
+            properties.setProperty("extension.name", "OpenAPI")
+            logger.lifecycle("Set default extension name: OpenAPI")
+        }
+        if (!properties.getProperty('extension.version')) {
+            throw new GradleException("Could not find extension version in ${extensionFilePath}")
+        }
+        if (!properties.getProperty('domain.name')) {
+            properties.setProperty("domain.name", "SDK")
+            logger.lifecycle("Set default domain name: SDK")
+        }
+        if (!properties.getProperty('ecosystem.name')) {
+            properties.setProperty("ecosystem.name", "Krista")
+            logger.lifecycle("Set default ecosystem name: Krista")
+        }
+
+        def releasePropertiesFile = project.file('release.properties')
+        def content = properties.collect { key, value -> "${key}=${value}" }.join('\n')
+        releasePropertiesFile.text = content + '\n'
+
+        logger.lifecycle("Generated release.properties with content:\n${content}")
+    }
+}
+
+tasks.register("setReleaseProperties") {
+    dependsOn("generateReleaseProperties")
+    doFirst {
+        def releasePropsFile = file("release.properties")
+        if (releasePropsFile.exists()) {
+            def props = new Properties()
+            releasePropsFile.withInputStream { stream -> props.load(stream) }
+            computedBaseName = (props['extension.name'] ?: computedBaseName).replaceAll(/\s+/, "")
+            computedVersion = props['extension.version'] ?: computedVersion
+            project.ext.set("finalBaseName", computedBaseName)
+            project.version = computedVersion
+            println "✓ Loaded extension name = ${computedBaseName}, version = ${computedVersion}"
+        } else {
+            logger.warn("⚠ release.properties not found; using default values.")
+            project.ext.set("finalBaseName", computedBaseName)
+            project.version = computedVersion
+        }
+    }
+}
+
+tasks.register("updateVersion") {
+    doFirst {
+        println "Building extension version: ${computedVersion}"
+    }
+}
+
+// Node.js configuration for React UI build
+node {
+    version = "18.17.1"
+    npmVersion = "9.5.1"
+    download = true
+    nodeProjectDir = file("${project.projectDir}/ui")
+}
+
+tasks.register('buildReactApp', NpmTask) {
+    dependsOn npmInstall
+    inputs.dir("./ui")
+    outputs.dir("./ui/build")
+    args = ['run', 'build']
+}
+
+dependencies {
+    annotationProcessor libraries.krista_anno_processor
+    compileOnly libraries.krista_apis
+    compileOnly libraries.hk2_api
+
+    implementation libraries.jersey_media_multipart
+    implementation libraries.jersey_client
+    implementation libraries.swagger_parser
+    implementation libraries.slf4j_log4j_binding
+
+    testImplementation testLibraries.jc_test
+    testImplementation testLibraries.junit_jupiter_api
+    testRuntimeOnly testLibraries.junit_jupiter_engine
+    testRuntimeOnly testLibraries.junit_vintage_engine
+    testImplementation testLibraries.junit4
+    testImplementation testLibraries.mockito_core
+    testImplementation testLibraries.mockito_junit_jupiter
+    testImplementation libraries.krista_apis
+}
+
+// Source inclusion tasks
+tasks.register('createSourceDir', Exec) {
+    dependsOn processResources
+    commandLine "mkdir", "-p", "$projectDir/build/classes/java/main/META-INF/project"
+}
+
+tasks.register('copyGradleFile', Exec) {
+    dependsOn createSourceDir
+    commandLine "cp", "$projectDir/build.gradle", "$projectDir/build/classes/java/main/META-INF/project/build.gradle"
+}
+
+tasks.register('includeSources', Exec) {
+    dependsOn copyGradleFile
+    commandLine "cp", "-r", "$projectDir/src", "$projectDir/build/classes/java/main/META-INF/project/src"
+}
+
+processResources {
+    dependsOn tasks.named('buildReactApp')
+    from('ui/build') { into 'ui' }
+}
+
+tasks.register('cleanUI', Delete) {
+    delete 'ui/build'
+}
+
+tasks.clean.dependsOn(tasks.named('cleanUI'))
+
+tasks.named("jar") {
+    dependsOn tasks.named("generateReleaseProperties")
+}
+
+jar {
+    dependsOn tasks.named("setReleaseProperties")
+    dependsOn tasks.named("includeSources")
+    archiveBaseName = project.ext.has("finalBaseName") ? project.ext.finalBaseName : "openapi-extension"
+    manifest {}
+}
+
