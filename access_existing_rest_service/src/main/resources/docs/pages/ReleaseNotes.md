@@ -22,7 +22,7 @@ This document contains the release history and changelog for the Krista Access E
 **Release Date**: Latest  
 **Developer**: Pulkit Jareda  
 **Krista Service APIs Java**: 1.0.93-rc2  
-**Global Catalog Version**: 1.0.44  
+**Global Catalog Version**: GC-2026.02.02  
 
 ### 🚀 New Features
 
